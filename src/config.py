@@ -1,9 +1,9 @@
 class DevelopmentConfig():
     DEBUG = True
-    MYSQL_HOST = 'localhost'
+    MYSQL_HOST = '127.0.0.1'
     MYSQL_USER = 'root'
-    MYSQL_PASSWORD = '1234'
-    MYSQL_DB = 'name'
+    MYSQL_PASSWORD = 'Aero_17!'
+    MYSQL_DB = 'bdviolentometro'
 
     
 config = {
