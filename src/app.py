@@ -57,7 +57,6 @@ def handle_form():
 
     return "Formulario recibido y procesado con éxito."
 
-
 if __name__ == "__main__":
     app.config.from_object(config["development"])
     app.run()
