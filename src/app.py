@@ -1,5 +1,6 @@
-from flask import Flask, request
+from flask import Flask, render_template, request, jsonify
 from flask_mysqldb import MySQL
+from flask_mail import Mail, Message
 
 from config import config
 
@@ -35,8 +36,6 @@ def handle_form():
     idPlatform = request.form.get("idPlatform")
     age = request.form.get("age")
 
-    print(names)
-
      # Validar campos numéricos
     if age:
         age = int(age)
@@ -48,15 +47,57 @@ def handle_form():
     else:
         idPlatform = None
 
-    # Guardar los datos en la base de datos
-    cur = mysql.connection.cursor()
-    cur.execute("INSERT INTO formularioayuda (names, surnames, eventZone, email, phone, idPlatform, age) VALUES (%s, %s, %s, %s, %s, %s, %s)",
+    try:
+        # Guardar los datos en la base de datos
+        cur = mysql.connection.cursor()
+        cur.execute("INSERT INTO formularioayuda (names, surnames, eventZone, email, phone, idPlatform, age) VALUES (%s, %s, %s, %s, %s, %s, %s)",
                 (names, surnames, eventZone, email, phone, idPlatform, age))
-    mysql.connection.commit()
-    cur.close()
+        mysql.connection.commit()
+        cur.close()
+        # Formulario almacenado exitosamente
+        return jsonify({'code': 1, 'message': '¡Exito!, denuncia subida correctamente.'}), 200
+    except Exception as e:
+        # Error al almacenar el formulario
+        return jsonify({'code': 0, 'message': '¡Ups!, hubo un error al subir la denuncia.', 'error': str(e)}), 500
 
-    return "Formulario recibido y procesado con éxito."
+""" EMIAL """
 
+# Configuración de Flask-Mail
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'  # Servidor de correo saliente (SMTP)
+app.config['MAIL_PORT'] = 465  # Puerto del servidor de correo
+app.config['MAIL_USE_TLS'] = False
+app.config['MAIL_USE_SSL'] = True
+app.config['MAIL_USERNAME'] = 'violentometrounam@gmail.com'  # Tu dirección de correo
+app.config['MAIL_PASSWORD'] = 'kkhyarylobcqodaj'  # Tu contraseña de correo
+
+mail = Mail(app)
+
+""" def enviar_correo(destinatario, asunto, cuerpo):
+    msg = Message(asunto, sender=app.config['MAIL_USERNAME'], recipients=[destinatario])
+    msg.body = cuerpo
+
+    # Envío del correo
+    with app.app_context():
+        mail.send(msg) """
+
+@app.route('/enviar-correo', methods=['POST'])
+def enviar_correo_handler():
+    destinatario = request.form.get('destinatario')
+    asunto = request.form.get('asunto')
+    
+     # Renderizar la plantilla de correo con Jinja2
+    cuerpo = render_template('correo.html', nombre='John Doe', mensaje='Hola, este es un ejemplo de correo.')
+
+    # Enviar el correo electrónico
+    msg = Message(asunto, sender='tu_correo@example.com', recipients=[destinatario])
+    msg.body = cuerpo  # No es necesario si se utiliza el método html del mensaje
+    msg.html = cuerpo  # Establecer el contenido HTML del mensaje
+
+    try:
+        mail.send(msg)
+        return jsonify({'status': 1, 'message': 'Correo de confirmacion enviado correctamente.'}), 200
+    except Exception as e:
+        return jsonify({'status': 0, 'message': 'Error al enviar el correo: ' + str(e)}), 400
 
 if __name__ == "__main__":
     app.config.from_object(config["development"])
