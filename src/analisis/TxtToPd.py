@@ -1,5 +1,7 @@
 import pandas as pd
 import regex as re
+import nltk
+nltk.download('stopwords')
 from unidecode import unidecode
 from nltk.corpus import stopwords
 

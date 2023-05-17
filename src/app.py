@@ -22,7 +22,7 @@ mysql = MySQL(app)
 
 @app.route("/upload", methods=["POST"])
 def upload_file():
-    with open(r'analisis\GRUmodel.pkl', 'rb') as file:
+    with open('src\GRUmodel.pkl', 'rb') as file:
         model = pickle.load(file)
     resp = dict()
     resp["status"] = 0
@@ -34,6 +34,7 @@ def upload_file():
             # ...
             # para activar cuando se tenga el modelo que haga las predicciones
             df = txttopd.panditas_android(content,nlp)
+            print(str(df["mensaje"]))
             
             # Calculate the mean of the 'num' column in the DataFrame
             indice_violencia =  predi.predict(df,model)
