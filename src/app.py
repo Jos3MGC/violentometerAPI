@@ -4,6 +4,14 @@ from flask_mail import Mail, Message
 
 from config import config
 
+import stanza
+import analisis.TxtToPd as txttopd
+import Prediction as predi
+import pandas as pd
+
+stanza.download("es")
+nlp = stanza.Pipeline("es")
+
 app = Flask(__name__)
 mysql = MySQL(app)
 
@@ -12,15 +20,34 @@ mysql = MySQL(app)
 
 @app.route("/upload", methods=["POST"])
 def upload_file():
-    file = request.files["file"]
-    if file and file.filename.endswith(".txt"):
-        content = file.read().decode("utf-8")
-        # Realiza las operaciones que desees con el contenido del archivo
-        # ...
+    resp = dict()
+    resp["status"] = 0
+    try:
+        file = request.files["file"]
+        if file and file.filename.endswith(".txt"): 
+            content = file.read().decode("utf-8")
+            # Realiza las operaciones que desees con el contenido del archivo
+            # ...
+            # para activar cuando se tenga el modelo que haga las predicciones
+            df = txttopd.panditas_android(content,nlp)
+            
+            # Calculate the mean of the 'num' column in the DataFrame
+            indice_violencia =  predi.predict(df)
+            
+            # Create a dictionary with the result
+            resp["indiceViolencia"]= indice_violencia
+            
+            
+            resp["status"] = 1
+            # Convert the dictionary to a JSON string
+            rel = jsonify(resp)
+            # Return the JSON response with the appropriate content type
+            return rel
 
-        return "Archivo recibido y procesado con éxito."
-    else:
-        return "Error: archivo no válido."
+        else:
+            return "Error: archivo no válido." + rel
+    except:
+        return jsonify(resp)
 
 
 """ FORMULARIO DE AYUDA """
