@@ -8,6 +8,9 @@ import stanza
 import analisis.TxtToPd as txttopd
 import pandas as pd
 
+stanza.download("es")
+nlp = stanza.Pipeline("es")
+
 app = Flask(__name__)
 mysql = MySQL(app)
 
@@ -21,10 +24,14 @@ def upload_file():
         content = file.read().decode("utf-8")
         # Realiza las operaciones que desees con el contenido del archivo
         # ...
-        
-        iniciaAnalisis(content)
+     
 
-        return "Archivo recibido y procesado con éxito." 
+
+        df = txttopd.panditas_android(content,nlp)
+        
+ 
+
+        return str(df["mensaje"]) #"Archivo recibido y procesado con éxito." 
     else:
         return "Error: archivo no válido."
 
@@ -82,8 +89,7 @@ def create_pipeline():
 
 
 def iniciaAnalisis(file):
-    with open('src\analisis\es_pipeline.pkl', 'rb') as f:
-        create_pipeline = pickle.load(f)
+    
 
     nlp = create_pipeline()
 
