@@ -28,7 +28,7 @@ def upload_file():
             content = file.read().decode("utf-8")
             # Realiza las operaciones que desees con el contenido del archivo
             # ...
-
+            # para activar cuando se tenga el modelo que haga las predicciones
             # df = txttopd.panditas_android(content,nlp)
             import random ##prueba todas as lineas de prueba se van a quitar cuando el modelo haga la prediccion
             numbers = [random.uniform(0, 1) for _ in range(10)]##prueba
