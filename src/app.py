@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, jsonify
 from flask_mysqldb import MySQL
 
 from config import config
@@ -7,9 +7,10 @@ import pickle
 import stanza
 import analisis.TxtToPd as txttopd
 import pandas as pd
+import json
 
-stanza.download("es")
-nlp = stanza.Pipeline("es")
+# stanza.download("es")
+# nlp = stanza.Pipeline("es")
 
 app = Flask(__name__)
 mysql = MySQL(app)
@@ -19,21 +20,40 @@ mysql = MySQL(app)
 
 @app.route("/upload", methods=["POST"])
 def upload_file():
-    file = request.files["file"]
-    if file and file.filename.endswith(".txt"):
-        content = file.read().decode("utf-8")
-        # Realiza las operaciones que desees con el contenido del archivo
-        # ...
-     
+    resp = dict()
+    resp["status"] = 0
+    try:
+        file = request.files["file"]
+        if file and file.filename.endswith(".txt"): 
+            content = file.read().decode("utf-8")
+            # Realiza las operaciones que desees con el contenido del archivo
+            # ...
 
+            # df = txttopd.panditas_android(content,nlp)
+            import random ##prueba todas as lineas de prueba se van a quitar cuando el modelo haga la prediccion
+            numbers = [random.uniform(0, 1) for _ in range(10)]##prueba
 
-        df = txttopd.panditas_android(content,nlp)
-        
- 
+            # Create a DataFrame with the numbers
+            df = pd.DataFrame({'num': numbers})##prueba
+            
+            # Calculate the mean of the 'num' column in the DataFrame
+            indice_violencia = df['num'].mean()##prueba
+            
+            # Create a dictionary with the result
+            resp["indiceViolencia"]= indice_violencia
+            
+            
+            resp["status"] = 1
+            # Convert the dictionary to a JSON string
+            rel = jsonify(resp)
+            # Return the JSON response with the appropriate content type
+            return rel
 
-        return str(df["mensaje"]) #"Archivo recibido y procesado con éxito." 
-    else:
-        return "Error: archivo no válido."
+            return str(df["mensaje"]) #"Archivo recibido y procesado con éxito." 
+        else:
+            return "Error: archivo no válido." + rel
+    except:
+        return jsonify(resp)
 
 
 """ FORMULARIO DE AYUDA """
