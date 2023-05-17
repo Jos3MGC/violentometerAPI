@@ -6,8 +6,10 @@ from config import config
 
 import stanza
 import analisis.TxtToPd as txttopd
-import Prediction as predi
+import analisis.Prediction as predi
 import pandas as pd
+import pickle
+import numpy as np
 
 stanza.download("es")
 nlp = stanza.Pipeline("es")
@@ -20,6 +22,8 @@ mysql = MySQL(app)
 
 @app.route("/upload", methods=["POST"])
 def upload_file():
+    with open(r'analisis\GRUmodel.pkl', 'rb') as file:
+        model = pickle.load(file)
     resp = dict()
     resp["status"] = 0
     try:
@@ -32,10 +36,10 @@ def upload_file():
             df = txttopd.panditas_android(content,nlp)
             
             # Calculate the mean of the 'num' column in the DataFrame
-            indice_violencia =  predi.predict(df)
-            
+            indice_violencia =  predi.predict(df,model)
+            print(indice_violencia)
             # Create a dictionary with the result
-            resp["indiceViolencia"]= indice_violencia
+            resp["indiceViolencia"]= np.float64(indice_violencia) #str(df["mensaje"])
             
             
             resp["status"] = 1
