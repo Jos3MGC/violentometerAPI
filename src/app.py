@@ -21,8 +21,10 @@ def upload_file():
         content = file.read().decode("utf-8")
         # Realiza las operaciones que desees con el contenido del archivo
         # ...
+        
+        iniciaAnalisis(content)
 
-        return "Archivo recibido y procesado con éxito."
+        return "Archivo recibido y procesado con éxito." 
     else:
         return "Error: archivo no válido."
 
@@ -70,10 +72,10 @@ if __name__ == "__main__":
 
 
 
-# def create_pipeline():
-#     stanza.download("es")
-#     nlp = stanza.Pipeline("es")
-#     return nlp
+def create_pipeline():
+    stanza.download("es")
+    nlp = stanza.Pipeline("es")
+    return nlp
 
 # with open('es_pipeline.pkl', 'wb') as f:
 #     pickle.dump(create_pipeline, f)

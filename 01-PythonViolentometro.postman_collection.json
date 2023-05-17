@@ -1,0 +1,107 @@
+{
+	"info": {
+		"_postman_id": "7c57aa51-d9f4-408b-a1e4-d19bc40c975b",
+		"name": "01-PythonViolentometro",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "20763003"
+	},
+	"item": [
+		{
+			"name": "APIViolentometro",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/C:/Users/josma/Downloads/PruebaAPI.txt"
+						}
+					]
+				},
+				"url": "http://127.0.0.1:5000/upload"
+			},
+			"response": []
+		},
+		{
+			"name": "FromularioViolentometro",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "names",
+							"value": "Jose",
+							"type": "text"
+						},
+						{
+							"key": "surnames",
+							"value": "Gonzalez",
+							"type": "text"
+						},
+						{
+							"key": "eventZone",
+							"value": "CASA",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "test@test.com",
+							"type": "text"
+						},
+						{
+							"key": "phone",
+							"value": "456546464",
+							"type": "text"
+						},
+						{
+							"key": "idPlatform",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "age",
+							"value": "25",
+							"type": "text"
+						}
+					]
+				},
+				"url": "http://127.0.0.1:5000/formulario"
+			},
+			"response": []
+		},
+		{
+			"name": "EnvioCorreo",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "destinatario",
+							"value": "josmara301@hotmail.com",
+							"type": "text"
+						},
+						{
+							"key": "asunto",
+							"value": "Prueba1",
+							"type": "text"
+						},
+						{
+							"key": "cuerpo",
+							"value": "Hola panzona",
+							"type": "text"
+						}
+					]
+				},
+				"url": "http://127.0.0.1:5000/enviar-correo"
+			},
+			"response": []
+		}
+	]
+}
