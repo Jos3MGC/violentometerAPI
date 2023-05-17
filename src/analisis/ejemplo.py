@@ -1,6 +1,8 @@
+# Este código solo es para ver la estructura del inicio del manejo de datos de texto
+
 import pickle
 import stanza
-import TxtToPd as txttopd
+import analisis.TxtToPd as txttopd
 
 def create_pipeline():
     stanza.download("es")

@@ -3,6 +3,11 @@ from flask_mysqldb import MySQL
 
 from config import config
 
+import pickle
+import stanza
+import analisis.TxtToPd as txttopd
+import pandas as pd
+
 app = Flask(__name__)
 mysql = MySQL(app)
 
@@ -61,3 +66,24 @@ def handle_form():
 if __name__ == "__main__":
     app.config.from_object(config["development"])
     app.run()
+
+
+
+
+# def create_pipeline():
+#     stanza.download("es")
+#     nlp = stanza.Pipeline("es")
+#     return nlp
+
+# with open('es_pipeline.pkl', 'wb') as f:
+#     pickle.dump(create_pipeline, f)
+
+
+def iniciaAnalisis(file):
+    with open('src\analisis\es_pipeline.pkl', 'rb') as f:
+        create_pipeline = pickle.load(f)
+
+    nlp = create_pipeline()
+
+
+    df = txttopd.panditas_android(file,nlp)
