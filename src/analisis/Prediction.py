@@ -23,7 +23,11 @@ def predict(df,model):
         # Use the loaded model for predictions or other tasks
         predictions = model.predict(X)
     except:
-        print("problema en el modelo")
-    
-    
-    return predictions.mean()
+        df["prediccion"] = predictions
+
+    #transforms into a diccionary
+    findic = dict()
+    for i in df.iterrows():
+        # print(i[1].keys())
+        findic[i[1]["Text"]] = i[1]["prediccion"]
+    return findic

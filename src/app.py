@@ -37,11 +37,12 @@ def upload_file():
             print(str(df["mensaje"]))
 
             # Calculate the mean of the 'num' column in the DataFrame
-            indice_violencia = predi.predict(df, model)
-            print(indice_violencia)
-            # Create a dictionary with the result
-            resp["indiceViolencia"] = np.float64(indice_violencia)  # str(df["mensaje"])
-
+            resp["data"]=  predi.predict(df,model)
+            # print(indice_violencia)
+            # # Create a dictionary with the result
+            # resp["data"]= np.float64(indice_violencia) #str(df["mensaje"])
+            
+            
             resp["status"] = 1
             # Convert the dictionary to a JSON string
             rel = jsonify(resp)
