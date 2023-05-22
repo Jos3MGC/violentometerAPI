@@ -1,6 +1,7 @@
 from keras.preprocessing.text import Tokenizer
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 import pickle
+import numpy as np
 
 MAX_NB_WORDS = 50000
 MAX_SEQUENCE_LENGTH = 200
@@ -23,11 +24,18 @@ def predict(df,model):
         # Use the loaded model for predictions or other tasks
         predictions = model.predict(X)
     except:
-        df["prediccion"] = predictions
+        print("No hizo prediccion")
+
+    df["prediccion"] = predictions
 
     #transforms into a diccionary
     findic = dict()
     for i in df.iterrows():
-        # print(i[1].keys())
-        findic[i[1]["Text"]] = i[1]["prediccion"]
-    return findic
+        print(i[1].keys())
+        findic[i[1]["mensaje"]] = i[1]["prediccion"]
+
+    aux = dict()
+    aux["promedio"] = np.float64(df["prediccion"].mean())
+    aux["frecuencia"] = findic
+
+    return aux

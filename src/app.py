@@ -41,8 +41,7 @@ def upload_file():
             # print(indice_violencia)
             # # Create a dictionary with the result
             # resp["data"]= np.float64(indice_violencia) #str(df["mensaje"])
-            
-            
+                        
             resp["status"] = 1
             # Convert the dictionary to a JSON string
             rel = jsonify(resp)
